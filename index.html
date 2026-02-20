@@ -165,13 +165,12 @@
           <h3>Experiments</h3>
           <ul class="bullets">
             <li>We analyse STOCHASTOK sampling: It is <strong>biased</strong> and has <strong>incomplete support</strong>.</li>
-            <li>New sampling schemes with increasing uniformity and support.</li>
+            <li>New sampling schemes with increasing uniformity and support:</li>
             <ul class="bullets">
               <li>STOCHASTOK-UNI: uniform conditional on per-token split counts.</li>
               <li>UNIFORM-K: uniform over all tokenisations at a given edit distance.</li>
               <li>UNIFORM: uniform over all valid tokenisations.</li>
             </ul>
-            <li>Fine-tune Llama-1b with different sampling schemes.</li>
             <li>Evaluate on random non-canonical tokenisations and increasing perturbation strength.</li>
           </ul>
         </div>
@@ -201,7 +200,7 @@
 
       <section class="section rq-section rq-3" id="rq3">
         <h2><span class="rq-number">Question 3</span> Does stochastic tokenisation improve robustness against adversarial tokenisations?</h2>
-        <p><em>Beyond random noise, does training with stochastic tokenisation improve robustness to adversarial tokenisation attacks, and why?</em></p>
+        <p><em>Beyond random tokenisations, does training with stochastic tokenisation improve robustness to adversarial tokenisation attacks, and why?</em></p>
 
         <div class="subsection">
           <h3>Experiments</h3>
@@ -229,7 +228,7 @@
             </div>
             <img src="asset/main-figure79.svg" alt="RQ3: Adversarial robustness comparison (new)" style="width: 66%; height: auto; border-radius: 8px; margin-bottom: 12px;">
             <div style="padding: 0 20px 8px; text-align: left; color: var(--muted); font-size: 0.92rem; line-height: 1.65;">
-              Normalised distances between representations of non-canonical tokenisations of the 1k most frequent English words.               Canonical fine-tuning does not affect the distances of alternative tokenisations compared to the zero-shot Llama-1b. Stochastic tokenisation reduce distances in deeper layers.
+              Normalised distances between representations of non-canonical tokenisations of the 1k most frequent English words.               Canonical fine-tuning does not affect the distances of alternative tokenisations compared to the zero-shot Llama-1b. Stochastic tokenisations reduce distances in deeper layers.
             </div>
           </div>
         </div>
