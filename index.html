@@ -1,0 +1,263 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Stochastic Tokenisation Improves Robustness</title>
+    <meta
+      name="description"
+      content="Project page for stochastic tokenisation robustness"
+    />
+    <link rel="icon" type="image/svg+xml" href="static/favicon.svg" />
+    <link rel="shortcut icon" href="static/favicon.svg" />
+    <link rel="stylesheet" href="static/css/style.css" />
+  </head>
+  <body>
+    <main class="page">
+      <header class="hero">
+        <h1 id="stochastic-title" class="stochastic-title">Stochastic Tokenisation Improves Robustness</h1>
+        <p class="subtitle"></p>
+        <p class="authors">
+          <a class="author-profile-link" href="https://scholar.google.com/citations?user=zeg5n-cAAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer">Sophie Steger</a><sup>1</sup> ·
+          <a class="author-profile-link" href="https://scholar.google.com/scholar?q=Rui+Li" target="_blank" rel="noopener noreferrer">Rui Li</a><sup>2</sup> ·
+          <a class="author-profile-link" href="https://sennadir.github.io/" target="_blank" rel="noopener noreferrer">Sofiane Ennadir</a><sup>3</sup> ·
+          <a class="author-profile-link" href="https://anyasims.github.io/" target="_blank" rel="noopener noreferrer">Anya Sims</a><sup>4</sup> ·
+          <a class="author-profile-link" href="https://users.aalto.fi/~asolin/" target="_blank" rel="noopener noreferrer">Arno Solin</a><sup>2</sup> ·
+          <a class="author-profile-link" href="https://scholar.google.com/citations?user=7Pq29-0AAAAJ&hl=en&oi=ao" target="_blank" rel="noopener noreferrer">Franz Pernkopf</a><sup>1</sup> ·
+          <a class="author-profile-link" href="https://trappmartin.github.io/" target="_blank" rel="noopener noreferrer">Martin Trapp</a><sup>5</sup>
+        </p>
+        <p class="affiliations">
+          <sup>1</sup>Institute of Signal Processing and Speech Communication, Graz University of Technology, Graz, Austria,
+          <sup>2</sup>ELLIS Institute Finland \& Aalto University, Espoo, Finland,
+          <sup>3</sup>King AI Labs, Microsoft Gaming,
+          <sup>4</sup>University of Oxford, Oxford, United Kingdom,
+          <sup>5</sup>KTH Royal Institute of Technology, Stockholm, Sweden
+        </p>
+        <div class="hero-links">
+          <a class="btn" href="#">
+            <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 4l7.5 8L3 20h3.5L14 12 6.5 4H3zM14 4h7l-7 8 7 8h-7l-7-8 7-8z" fill="currentColor"/></svg>
+            arXiv
+          </a>
+          <a class="btn" href="#">
+            <svg class="btn-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 .5a12 12 0 0 0-3.8 23.4c.6.1.8-.3.8-.6v-2.2c-3.4.7-4.2-1.5-4.2-1.5-.5-1.4-1.3-1.8-1.3-1.8-1.1-.8.1-.8.1-.8 1.2.1 1.9 1.3 1.9 1.3 1.1 1.9 2.9 1.4 3.6 1.1.1-.8.4-1.4.8-1.7-2.7-.3-5.5-1.3-5.5-6 0-1.3.5-2.4 1.3-3.3-.1-.3-.6-1.6.1-3.2 0 0 1-.3 3.4 1.3a11.7 11.7 0 0 1 6.2 0c2.4-1.6 3.4-1.3 3.4-1.3.7 1.6.2 2.9.1 3.2.8.9 1.3 2 1.3 3.3 0 4.7-2.8 5.7-5.5 6 .4.3.9 1.1.9 2.2v3.3c0 .3.2.7.8.6A12 12 0 0 0 12 .5z" fill="currentColor"/></svg>
+            Code
+          </a>
+        </div>
+      </header>
+
+      <section class="section" id="tldr">
+        <div class="section-header">
+          <h2>T L D R </h2>
+        </div>
+        <p>
+          We analyse how training with stochastic tokenisations affects robustness to adversarial attacks and random perturbations, and show that uniformly sampled stochastic tokenisations improve robustness without increasing inference cost.
+        </p>
+      </section>
+
+      <section class="section" id="abstract">
+        <h2>Abstract</h2>
+        <p>
+        The widespread adoption of large language models (LLMs) has increased concerns about their robustness. Vulnerabilities in perturbations of tokenisation of the input indicate that models trained with a deterministic canonical tokenisation can be brittle to adversarial attacks. Recent studies suggest that stochastic tokenisation can deliver internal representations that are less sensitive to perturbations. In this paper, we analyse how stochastic tokenisations affect robustness to adversarial attacks and random perturbations. We systematically study this over a range of learning regimes (pre-training, supervised fine-tuning, and in-context learning), data sets, and model architectures. We show that pre-training and fine-tuning with uniformly sampled stochastic tokenisations improve robustness to random and adversarial perturbations. Evaluating on uniformly sampled non-canonical tokenisations reduces the accuracy of a canonically trained Llama-1b model by 29.3%. We find that training with stochastic tokenisation preserves accuracy without increasing inference cost. 
+
+        </p>
+      </section>
+
+      <section class="section" id="contributions">
+        <h2>Contributions</h2>
+        <ul class="bullets">
+          <li>We study how training with stochastic tokenisation affects robustness against random and adversarial tokenisations.</li>
+          <li>We analyse the sampling distribution of STOCHASTOK, finding that it is biased, and introduce unbiased uniform sampling schemes.</li>
+          <li>We provide theoretical insights into adversarial robustness introduced by stochastic tokenisation.</li>
+        </ul>
+      </section>
+
+      <section class="section problem-highlight" id="motivation">
+        <h2>Problem: Tokenisation Brittleness</h2>
+        <p>
+          In subword tokenisation, string sequences are mapped to tokens. Text is typically encoded using a deterministic function that returns the canonical tokenisation.  However, multiple other token sequences can reconstruct the same string, referred to as non-canonical tokenisations.
+        </p>
+        <div class="figure">
+          <div class="figure-frame problem-frame" style="text-align: left; padding: 24px;">
+            <p style="margin: 0 0 10px; font-weight: 600; color: var(--accent);">Same string, multiple valid tokenisations</p>
+            <div style="font-family: monospace; font-size: 0.94rem; line-height: 1.8; color: var(--ink);">
+              <div><strong>Canonical:</strong> "revolution" → <span class="inline-token-seq"><span class="inline-token-box">revolution</span></span></div>
+              <div><strong>Non-canonical:</strong> "revolution" → <span class="inline-token-seq"><span class="inline-token-box">re</span><span class="inline-token-box">v</span><span class="inline-token-box">ol</span><span class="inline-token-box">ution</span></span></div>
+              <div><strong>Non-canonical:</strong> "revolution" → <span class="inline-token-seq"><span class="inline-token-box">r</span><span class="inline-token-box">e</span><span class="inline-token-box">v</span><span class="inline-token-box">o</span><span class="inline-token-box">l</span><span class="inline-token-box">u</span><span class="inline-token-box">t</span><span class="inline-token-box">i</span><span class="inline-token-box">o</span><span class="inline-token-box">n</span></span></div>
+            </div>
+	          </div>
+	        </div>
+        <p>
+          In standard training, models see only canonical tokenisations and become brittle when evaluated on non-canonical tokenisations.
+        </p>
+        <div class="figure">
+          <div class="figure-frame problem-frame">
+            <img src="asset/main-figure0.svg" alt="Canonical models collapse under non-canonical tokenisation while stochastic schemes remain robust" style="width: 64%; height: auto; border-radius: 8px; margin: 0 auto 14px; display: block;">
+            <div style="padding: 0 20px 8px; text-align: left; color: var(--muted); font-size: 0.92rem; line-height: 1.65;">
+            As the level of stochasticity increases (increasing normalised edit distance), the accuracy of Llama-1b trained with canonical tokenisation (CANON) sharply drops while the same model fine-tuned with any stochastic tokenisation scheme (STOK, STOK-UNI, or UNI-K) remains robust to perturbations during testing.
+            </div>
+          </div>
+        </div>
+        <p>
+          <em>
+          This motivates our core question: <strong>Does training with stochastic tokenisation improve robustness to non-canonical tokenisations (both random and adversarial), and if so, which sampling strategy works best?</strong>
+          </em>
+        </p>
+      </section>
+
+      <section class="section rq-section rq-1" id="rq1">
+        <h2><span class="rq-number">Question 1</span> Does stochastic tokenisation improve robustness?</h2>
+        <p><em>If we train LLMs with stochastic tokenisations instead of only the canonical one, do they become more robust to non-canonical (random) tokenisations?</em></p>
+
+        <div class="subsection">
+          <h3>Experiments</h3>
+          <ul class="bullets">
+            <li>Stochastic tokenisation scheme: <strong>STOCHASTOK</strong>, with a tunable parameter &alpha; controlling the level of stochasticity.</li>
+            <li>We evaluate <strong>pre-training</strong>, <strong>fine-tuning</strong>, and <strong>in-context learning (ICL)</strong>.</li>
+            <li>Benchmarks: LANGUAGE GAME, CUTE, and standard MCQ datasets.</li>
+            <li>Models: Tiny-LLM (from scratch), Llama-1b (LoRA fine-tuning), Llama-8b (ICL).</li>
+          </ul>
+        </div>
+
+        <div class="subsection">
+          <h3>Results</h3>
+          <ul class="bullets">
+            <li><em>Canonically</em> trained models are <strong>brittle</strong>: accuracy drops sharply under non-canonical tokenisations.</li>
+            <li><em>Pre-training</em> with stochastic tokenisation helps, but gains are moderate alone.</li>
+            <li><em>Fine-tuning</em> with stochastic tokenisation improves robustness, even with a small &alpha;.</li>
+            <li><em>ICL</em> with stochastic tokenisation gives mild robustness gains, but less than fine-tuning.</li>
+          </ul>
+        </div>
+
+        <div class="figure">
+          <div class="figure-frame rq-frame" style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; align-items: start;">
+            <img src="asset/main-figure34.svg" alt="Figure 2 left: Tiny-LLM stochastic pre-training robustness" style="width: 74%; height: auto; border-radius: 8px; justify-self: center;">
+            <img src="asset/main-figure35.svg" alt="Figure 2 right: Tiny-LLM stochastic fine-tuning robustness" style="width: 74%; height: auto; border-radius: 8px; justify-self: center;">
+            <div style="grid-column: 1 / -1; padding: 12px 20px 0 20px; text-align: left; color: var(--muted); font-size: 0.92rem; line-height: 1.65;">
+              Pretraining a tiny LLM from scratch. Left, stochastic pre-training improves accuracy and mild robustness; right, additional stochastic fine-tuning (&alpha;<sub>fine</sub> &gt; 0) after &alpha;<sub>pre</sub> = 0.1 substantially improves robustness.
+            </div>
+          </div>
+        </div>
+
+        <div class="figure">
+          <div class="figure-frame rq-frame">
+            <img src="asset/main-figure36.svg" alt="Figure 3: Llama-1b robustness after stochastic fine-tuning alone" style="width: 62%; height: auto; border-radius: 8px; margin-bottom: 12px;">
+            <div style="padding: 0 20px 8px; text-align: left; color: var(--muted); font-size: 0.92rem; line-height: 1.65;">
+              Canonically pre-trained Llama-1b checkpoint—stochastic fine-tuning of a LoRA adapter is sufficient to improve robustness against non-canonical tokenisations.
+            </div>
+          </div>
+        </div>
+
+        <div class="figure">
+          <div class="figure-frame problem-frame" style="text-align: left; padding: 20px; background: linear-gradient(135deg, rgba(209, 73, 42, 0.08) 0%, rgba(255, 248, 245, 0.95) 100%);">
+            <p style="margin: 0; font-size: 1.02rem; line-height: 1.7; color: var(--ink);">
+              Training with stochastic tokenisations improves robustness while keeping clean accuracy intact. 
+              Using publicly available pre-trained checkpoints, stochastic fine-tuning alone achieves substantial robustness gains. ICL with stochastic tokenisation also helps, but to a lesser extent than fine-tuning.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section rq-section rq-2" id="rq2">
+        <h2><span class="rq-number">Question 2</span> Improving with uniform sampling of tokenisations?</h2>
+        <p><em>Does the distribution over stochastic tokenisations matter for robustness, and can we do better than STOCHASTOK?</em></p>
+
+          <h3>Experiments</h3>
+          <ul class="bullets">
+            <li>We analyse STOCHASTOK sampling: It is <strong>biased</strong> and has <strong>incomplete support</strong>.</li>
+            <li>New sampling schemes with increasing uniformity and support:</li>
+            <ul class="bullets">
+              <li>STOCHASTOK-UNI: uniform conditional on per-token split counts.</li>
+              <li>UNIFORM-K: uniform over all tokenisations at a given edit distance.</li>
+              <li>UNIFORM: uniform over all valid tokenisations.</li>
+            </ul>
+            <li>Evaluate on random non-canonical tokenisations and increasing perturbation strength.</li>
+          </ul>
+        </div>
+        <div class="subsection">
+          
+                  <div class="figure">
+                    <div class="figure-frame rq-frame">
+                      <img src="asset/main-figure45.svg" alt="RQ2: Uniform distribution comparison" style="width: 76%; height: auto; border-radius: 8px; margin-bottom: 12px;">
+                      <div style="padding: 12px; background: rgba(209, 73, 42, 0.05); border-radius: 6px; font-size: 0.85rem; color: var(--ink); line-height: 1.6; margin-bottom: 8px;">
+                        Histogram over tokenisations with edit distance 4 from the canonical tokenisation of "revolution".
+                        STOCHASTOK induces a biased distribution over a subset of segmentations, 
+                        whereas STOCHASTOK-UNI samples uniformly with full support.
+                      </div>
+                      <div style="padding: 0 20px 8px; text-align: left; color: var(--muted); font-size: 0.92rem; line-height: 1.65;">
+                      </div>
+                    </div>
+                  </div>
+
+        <div class="figure">
+          <div class="figure-frame problem-frame" style="text-align: left; padding: 20px; background: linear-gradient(135deg, rgba(209, 73, 42, 0.08) 0%, rgba(255, 248, 245, 0.95) 100%);">
+            <p style="margin: 0; font-size: 1.02rem; line-height: 1.7; color: var(--ink);">
+              </li>Higher <strong>uniformity</strong> and larger <strong>support</strong> lead to better robustness.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      <section class="section rq-section rq-3" id="rq3">
+        <h2><span class="rq-number">Question 3</span> Does stochastic tokenisation improve robustness against adversarial tokenisations?</h2>
+        <p><em>Beyond random tokenisations, does training with stochastic tokenisation improve robustness to adversarial tokenisation attacks, and why?</em></p>
+
+        <div class="subsection">
+          <h3>Experiments</h3>
+          <ul class="bullets">
+            <li>We compare canonical, and stochastic tokenisation during fine-tuning and report accuracy under <strong>canonical</strong> and <strong>adversarial</strong> tokenisation.</li>
+            <li>We analyse distances between non-canonical tokenisation representations to understand robustness mechanisms.</li>
+          </ul>
+        </div>
+  
+        <div class="subsection">
+          <h3>Results</h3>
+          <ul class="bullets">
+            <li><strong>Canonical</strong> fine-tuning accuracy <strong>collapses</strong> under attack (≈94% → ≈6%).</li>
+            <li><strong>Stochastic schemes</strong> show massive robustness gains. More uniform sampling leads to stronger adversarial robustness.</li>
+            <li>Representation analysis shows <strong>reduced sensitivity</strong> to tokenisation changes.</li>
+            <li><strong>Theory:</strong> Stochasticity smooths embedding space, reducing Lipschitz constants and adversarial vulnerability.</li>
+          </ul>
+        </div>
+
+        <div class="figure">
+          <div class="figure-frame rq-frame">
+            <img src="asset/main-figure46.svg" alt="RQ3: Adversarial robustness comparison (original)" style="width: 76%; height: auto; border-radius: 8px; margin-bottom: 12px;">
+            <div style="padding: 0 20px 8px; text-align: left; color: var(--muted); font-size: 0.92rem; line-height: 1.65;">
+              Accuracy under canonical and adversarial tokenisation for Llama-1b across fine-tuning strategies; canonical training collapses under attack, while stochastic schemes remain substantially more robust.
+            </div>
+            <img src="asset/main-figure79.svg" alt="RQ3: Adversarial robustness comparison (new)" style="width: 66%; height: auto; border-radius: 8px; margin-bottom: 12px;">
+            <div style="padding: 0 20px 8px; text-align: left; color: var(--muted); font-size: 0.92rem; line-height: 1.65;">
+              Normalised distances between representations of non-canonical tokenisations of the 1k most frequent English words.               Canonical fine-tuning does not affect the distances of alternative tokenisations compared to the zero-shot Llama-1b. Stochastic tokenisations reduce distances in deeper layers.
+            </div>
+          </div>
+        </div>
+
+
+        <div class="figure">
+          <div class="figure-frame problem-frame" style="text-align: left; padding: 20px; background: linear-gradient(135deg, rgba(209, 73, 42, 0.08) 0%, rgba(255, 248, 245, 0.95) 100%);">
+            <p style="margin: 0; font-size: 1.02rem; line-height: 1.7; color: var(--ink);">
+              <strong>Stochastic fine-tuning reduces brittleness under adversarial tokenisation. Theoretically and empirically, stochasticity smooths representations and reduces adversarial vulnerability.
+            </p>
+          </div>
+        </div>
+      </section>
+
+
+
+      <section class="section" id="bibtex">
+        <h2>BibTeX</h2>
+        <pre class="bibtex">
+
+          
+@article{steger2026stochastic,
+  title   = {Stochasticity in Tokenisation Improves Robustness},
+  author  = {Sophie Steger and Rui Li and Sofiane Ennadir and Anya Sims and Arno Solin and Franz Pernkopf and Martin Trapp},
+  journal = {arXiv preprint arXiv:xxxx.xxxxx},
+  year    = {2026}
+}
+         </pre>
+      </section>
+    </main>
+    <script src="static/js/title-stochastic.js"></script>
+  </body>
+</html>

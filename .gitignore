@@ -1,0 +1,6 @@
+.DS_Store
+Thumbs.db
+
+# Generated/derived figure formats in assets
+asset/*.png
+asset/*.pdf
